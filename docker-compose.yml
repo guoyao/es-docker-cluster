@@ -1,0 +1,55 @@
+version: "2"
+services:
+  es-master:
+    image: elasticsearch:6.8.3
+    container_name: es-master
+    restart: always
+    mem_limit: 2g
+    volumes:
+      - ./master/data:/usr/share/elasticsearch/data:rw
+      - ./master/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./master/logs:/user/share/elasticsearch/logs:rw
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  es-node1:
+    image: elasticsearch:6.8.3
+    container_name: es-node1
+    restart: always
+    mem_limit: 1g
+    volumes:
+      - ./node1/data:/usr/share/elasticsearch/data:rw
+      - ./node1/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./node1/logs:/user/share/elasticsearch/logs:rw
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  es-node2:
+    image: elasticsearch:6.8.3
+    container_name: es-node2
+    restart: always
+    mem_limit: 1g
+    volumes:
+      - ./node2/data:/usr/share/elasticsearch/data:rw
+      - ./node2/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./node2/logs:/user/share/elasticsearch/logs:rw
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  es-head:
+    image: tobias74/elasticsearch-head:6
+    container_name: es-head
+    restart: always
+    mem_limit: 1g
+    ports:
+      - "9100:9100"
+  kibana:
+    image: kibana:6.8.3
+    container_name: kibana
+    restart: always
+    mem_limit: 1g
+    environment:
+      SERVER_NAME: localhost
+      ELASTICSEARCH_URL: http://es-master:9200/
+    ports:
+      - "5601:5601"
