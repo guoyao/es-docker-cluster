@@ -1,6 +1,6 @@
 cluster.name: "es-cluster"
 node.name: node2
-node.master: false
+node.master: true
 node.data: true
 network.host: 0.0.0.0
 http.port: 9202
