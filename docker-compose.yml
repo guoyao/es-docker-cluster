@@ -1,15 +1,15 @@
 version: "2"
 services:
-  es-master:
+  es-node0:
     image: elasticsearch:6.8.3
-    container_name: es-master
-    mem_limit: 2g
+    container_name: es-node0
+    mem_limit: 1g
     volumes:
-      - ./master/data:/usr/share/elasticsearch/data:rw
-      - ./master/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./master/logs:/user/share/elasticsearch/logs:rw
+      - ./node0/data:/usr/share/elasticsearch/data:rw
+      - ./node0/conf/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./node0/logs:/user/share/elasticsearch/logs:rw
     environment:
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
   es-node1:
     image: elasticsearch:6.8.3
     container_name: es-node1
@@ -42,12 +42,12 @@ services:
       SERVER_NAME: localhost
       SERVER_BASEPATH: /kibana
       SERVER_REWRITEBASEPATH: "true"
-      ELASTICSEARCH_URL: http://proxy:80/
-  nginx:
-    image: nginx:1.16.1-alpine
-    container_name: proxy
+      ELASTICSEARCH_URL: http://tengine:80/
+  tengine:
+    image: axizdkr/tengine:2.3.2
+    container_name: tengine
     ports:
       - "9200:80"
     volumes:
-      - ./nginx/logs:/var/log/nginx:rw
-      - ./nginx/conf/conf.d:/etc/nginx/conf.d:ro
+      - ./tengine/logs:/var/log/nginx:rw
+      - ./tengine/conf/conf.d:/etc/nginx/conf.d:ro
